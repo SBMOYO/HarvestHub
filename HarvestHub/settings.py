@@ -139,3 +139,12 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# Celery
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'send-daily-updates': {
+        'task': 'notify.tasks.send_daily_updates',
+        'schedule': 86400,  # 24 hours
+    },
+}
