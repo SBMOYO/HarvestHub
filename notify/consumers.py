@@ -1,6 +1,7 @@
 import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
+from twilio.twiml.messaging_response import MessagingResponse
 
 class DailyUpdatesConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -19,15 +20,21 @@ class DailyUpdatesConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+        incoming_msg = text_data_json.get("message", "").lower()
+        # Process the incoming message (e.g., extract relevant info)
+        # Implement your logic here to generate a response
+
+        # Example: Echo the received message back
+        response = MessagingResponse()
+        response.message(f"You said: {incoming_msg}")
 
         # Send message to room group
         await self.channel_layer.group_send(
-            self.room_group_name, {"type": "notify.message", "message": message}
+            self.room_group_name, {"type": "notify.message", "message": response.to_xml()}
         )
 
     # Receive message from room group
-    async def daily_updates_message(self, event):
+    async def notify_message(self, event):
         message_content = event["message"]
 
         # Send message to WebSocket
