@@ -25,18 +25,23 @@ SECRET_KEY = 'django-insecure-9kb2nlg^e^iy2&&4ke*y@*bdq3^7talbxjc%^m4phu$eaxuvv7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # 'daphne',
+    'notify',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    
+    # 'channels',
 ]
 
 MIDDLEWARE = [
@@ -68,6 +73,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'HarvestHub.wsgi.application'
+
+# ASGI_APPLICATION = 'HarvestHub.asgi.application'
 
 
 # Database
@@ -121,3 +128,31 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from decouple import config
+
+ACCOUNT_SID = config('ACCOUNT_SID')
+AUTH_TOKEN = config('AUTH_TOKEN')
+
+
+# Channels
+# ASGI_APPLICATION = "HarvestHub.asgi.application"
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],
+#         },
+#     },
+# }
+
+from celery.schedules import crontab
+# Celery
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'send-daily-whatsapp-updates': {
+        'task': 'notify.tasks.send_daily_whatsapp_updates',
+        'schedule': crontab(hour=24, minute=0),
+    },
+}
