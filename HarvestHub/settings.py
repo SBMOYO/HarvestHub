@@ -129,6 +129,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+from decouple import config
+
+ACCOUNT_SID = config('ACCOUNT_SID')
+AUTH_TOKEN = config('AUTH_TOKEN')
+
+
 # Channels
 # ASGI_APPLICATION = "HarvestHub.asgi.application"
 # CHANNEL_LAYERS = {
