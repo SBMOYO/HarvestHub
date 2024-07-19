@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     # 'daphne',
     'notify',
+    'farmbot',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -153,6 +154,6 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_BEAT_SCHEDULE = {
     'send-daily-whatsapp-updates': {
         'task': 'notify.tasks.send_daily_whatsapp_updates',
-        'schedule': crontab(hour=24, minute=0),
+        'schedule': crontab(hour=23, minute=0),
     },
 }
