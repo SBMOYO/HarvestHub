@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     # 'daphne',
     'notify',
+    'weather_updates',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -154,5 +155,7 @@ CELERY_BEAT_SCHEDULE = {
     'send-daily-whatsapp-updates': {
         'task': 'notify.tasks.send_daily_whatsapp_updates',
         'schedule': crontab(hour=23, minute=0),
+        'task': 'weather_updates.tasks.daily_weather_updates_task',
+        'schedule': crontab(hour=0, minute=1),
     },
 }

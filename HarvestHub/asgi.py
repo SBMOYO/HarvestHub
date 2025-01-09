@@ -18,7 +18,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HarvestHub.settings')
 
 django_asgi_app = get_asgi_application()
 
-from notify.celery import websocket_urlpatterns
+from HarvestHub.celery import websocket_urlpatterns
 
 application = ProtocolTypeRouter(
     {
